@@ -1,23 +1,36 @@
+import { useEffect, useRef } from 'react'
 import useSWR from 'swr'
+import { embedDashboard } from 'amazon-quicksight-embedding-sdk';
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
+const EmbeddedDashboard = ({ url }) => {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    embedDashboard({
+      // https://github.com/awslabs/amazon-quicksight-embedding-sdk#step-2-configure-embedding
+      url,
+      container: ref.current,
+      scrolling: "no",
+      height: "AutoFit",
+      iframeResizeOnSheetChange: true, // use this option in combination with height: AutoFit, to allow iframe height to resize dynamically, based on sheet height, on changing sheets.
+      footerPaddingEnabled: true,
+    });
+  }, [url])
+  return <div ref={ref} />
+}
+
 const Dashboard = ({ isAdmin }) => {
-  const { data, error } = useSWR(`/api/dashboard?admin=${isAdmin}`, fetcher)
+  const { data, error } = useSWR(
+    `/api/dashboard?${isAdmin ? 'admin=1' : ''}`,
+    fetcher
+  )
 
   if (error) return <div>Failed to load</div>
   if (!data) return <div className="spinner-border m-2" role="status" />
 
-  return (
-    <iframe
-      src={data.EmbedUrl}
-      title="dashboard"
-      sandbox="allow-same-origin allow-scripts"
-      height="1000px"
-      width="100%"
-      style={{ border: "1px solid #eee" }}
-    />
-  )
+  return <EmbeddedDashboard url={data.EmbedUrl} />
 }
 
 export default Dashboard

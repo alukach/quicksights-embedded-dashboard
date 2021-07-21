@@ -4,7 +4,7 @@ import Dashboard from '../components/EmbeddedDashboard'
 
 
 export default function Index() {
-  const [isAdmin, setAdmin] = useState(1)
+  const [isAdmin, setAdmin] = useState('1')
 
   return (<>
     <Head>
@@ -16,14 +16,19 @@ export default function Index() {
       <div className="container-fluid">
         <span className="navbar-brand mb-0 h1">QuickSight Demo</span>
         <form className="d-flex">
-          <select className="form-select" aria-label="Default select example" value={isAdmin} onChange={e => setAdmin(e.target.value)}>
-            <option value={1}>Admin</option>
-            <option value={0}>Regular User</option>
+          <select
+            className="form-select" 
+            aria-label="Default select example" 
+            value={isAdmin} 
+            onChange={e => setAdmin(e.target.value)}
+          >
+            <option value='1'>Admin</option>
+            <option value='0'>Regular User</option>
           </select>
         </form>
       </div>
     </nav>
 
-    <Dashboard isAdmin={isAdmin} />
+    <Dashboard isAdmin={isAdmin === '1'} />
   </>)
 }
