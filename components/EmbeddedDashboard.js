@@ -14,7 +14,9 @@ const EmbeddedDashboard = ({ url }) => {
       container: ref.current,
       scrolling: "no",
       height: "AutoFit",
-      iframeResizeOnSheetChange: true, // use this option in combination with height: AutoFit, to allow iframe height to resize dynamically, based on sheet height, on changing sheets.
+      // use this option in combination with height: AutoFit, to allow iframe height to resize dynamically, 
+      // based on sheet height, on changing sheets.
+      iframeResizeOnSheetChange: true, 
       footerPaddingEnabled: true,
     });
   }, [url])
@@ -24,7 +26,9 @@ const EmbeddedDashboard = ({ url }) => {
 const Dashboard = ({ isAdmin }) => {
   const { data, error } = useSWR(
     `/api/dashboard?${isAdmin ? 'admin=1' : ''}`,
-    fetcher
+    fetcher,
+    // Prevent unnecessary duplicate fetches (causes multiple dashboard to be mounted)
+    { revalidateOnFocus: false, revalidateOnReconnect: false } 
   )
 
   if (error) return <div>Failed to load</div>
