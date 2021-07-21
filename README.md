@@ -1,27 +1,36 @@
-# Basic API routes example
+# QuickSights Embedded Dashboard demo
 
-Next.js ships with [API routes](https://nextjs.org/docs/api-routes/introduction) which provides an easy solution to build your own `API`. This example shows how to create multiple `API` endpoints with serverless functions, which can execute independently.
+This demo serves to demonstrate how an AWS QuickSight dashboard can be embedded within a Next.js application.
 
-## Preview
+## Setup
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
+### `.env.local`
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/api-routes)
+Populate `.env.local` with the following variables:
 
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/api-routes&project-name=api-routes&repository-name=api-routes)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example api-routes api-routes-app
-# or
-yarn create next-app --example api-routes api-routes-app
+```
+AWS_PROFILE=
+AWS_ACCOUNT_ID=
+DASHBOARD_ID=
+ADMIN_USERNAME=
+ANON_USERNAME=
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+### Configure hostname
+
+For QuickSight to support embedding, it must be running in "Enterprise" mode. Within AWS QuickSight, you will need to explicitely permit a domain within the "Domains and Embedding" section of the QuickSight management console.
+
+![](.readme/add-domain.png)
+
+You will also need to add that domain name to your `/etc/hosts` file:
+
+```
+127.0.0.1 quicksight.local
+```
+
+### Run application
+
+1. Start server on HTTP: `PORT=3001 npm run dev`
+2. Proxy requests from HTTPS to HTTP: `npx local-ssl-proxy --source 3000 --target 3001`
+
+Assuming that you have configured your hostnames with `quicksight.local`, your application should now be available at https://quicksight.local:3000
