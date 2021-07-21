@@ -4,7 +4,7 @@ import Dashboard from '../components/EmbeddedDashboard'
 
 
 export default function Index() {
-  const [isAdmin, setAdmin] = useState('1')
+  const [role, setRole] = useState('user')
 
   return (<>
     <Head>
@@ -17,18 +17,18 @@ export default function Index() {
         <span className="navbar-brand mb-0 h1">QuickSight Demo</span>
         <form className="d-flex">
           <select
-            className="form-select" 
-            aria-label="Default select example" 
-            value={isAdmin} 
-            onChange={e => setAdmin(e.target.value)}
+            className="form-select"
+            aria-label="Select role"
+            value={role}
+            onChange={e => setRole(e.target.value)}
           >
-            <option value='1'>Admin</option>
-            <option value='0'>Regular User</option>
+            <option value='admin'>Admin</option>
+            <option value='user'>Regular User</option>
           </select>
         </form>
       </div>
     </nav>
 
-    <Dashboard isAdmin={isAdmin === '1'} />
+    <Dashboard isAdmin={role === 'admin'} />
   </>)
 }
